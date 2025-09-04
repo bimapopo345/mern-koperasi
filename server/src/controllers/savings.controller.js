@@ -9,6 +9,7 @@ import {
   updateSavingsSchema,
   querySavingsSchema,
 } from "../validations/savings.validation.js";
+import { transformSavingsWithFileUrls, getStoragePath } from "../utils/fileUtils.js";
 
 // Get all savings
 const getAllSavings = asyncHandler(async (req, res) => {
@@ -32,9 +33,12 @@ const getAllSavings = asyncHandler(async (req, res) => {
 
   const total = await Savings.countDocuments(query);
 
+  // Transform savings data to include full file URLs
+  const transformedSavings = transformSavingsWithFileUrls(savings);
+
   res.status(200).json(
     new ApiResponse(200, {
-      savings,
+      savings: transformedSavings,
       pagination: {
         currentPage: page,
         totalPages: Math.ceil(total / limit),
@@ -56,7 +60,10 @@ const getSavingsById = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Data simpanan tidak ditemukan");
   }
 
-  res.status(200).json(new ApiResponse(200, savings));
+  // Transform savings data to include full file URL
+  const transformedSavings = transformSavingsWithFileUrls(savings);
+
+  res.status(200).json(new ApiResponse(200, transformedSavings));
 });
 
 // Create new savings
@@ -144,9 +151,12 @@ const createSavings = asyncHandler(async (req, res) => {
   await savings.save();
   console.log("✅ Savings created successfully");
 
+  // Transform savings data to include full file URL
+  const transformedSavings = transformSavingsWithFileUrls(savings);
+
   res
     .status(201)
-    .json(new ApiResponse(201, savings, "Data simpanan berhasil dibuat"));
+    .json(new ApiResponse(201, transformedSavings, "Data simpanan berhasil dibuat"));
 });
 
 // Update savings
@@ -248,9 +258,12 @@ const updateSavings = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Data simpanan tidak ditemukan");
   }
 
+  // Transform savings data to include full file URL
+  const transformedSavings = transformSavingsWithFileUrls(savings);
+
   res
     .status(200)
-    .json(new ApiResponse(200, savings, "Data simpanan berhasil diperbarui"));
+    .json(new ApiResponse(200, transformedSavings, "Data simpanan berhasil diperbarui"));
 });
 
 // Delete savings
@@ -330,9 +343,12 @@ const getSavingsByMember = asyncHandler(async (req, res) => {
     `getSavingsByMember: Found ${savings.length} savings for memberId ${memberId}`
   ); // Debug
 
+  // Transform savings data to include full file URLs
+  const transformedSavings = transformSavingsWithFileUrls(savings);
+
   res.status(200).json(
     new ApiResponse(200, {
-      savings,
+      savings: transformedSavings,
       summary: {
         totalSavings,
         totalWithdrawals,
@@ -563,9 +579,12 @@ const getSavingsByMemberUuid = asyncHandler(async (req, res) => {
     );
   });
 
+  // Transform savings data to include full file URLs
+  const transformedSavings = transformSavingsWithFileUrls(allSavings);
+
   res.status(200).json(
     new ApiResponse(200, {
-      savings: allSavings,
+      savings: transformedSavings,
       member: {
         uuid: member.uuid,
         name: member.name,

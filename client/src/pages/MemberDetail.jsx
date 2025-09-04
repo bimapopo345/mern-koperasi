@@ -170,8 +170,8 @@ const MemberDetail = () => {
 
   const handleShowProof = (proofFile, period) => {
     if (proofFile && proofFile !== "0") {
-      // File sudah berisi path lengkap, langsung pakai
-      const fileUrl = `http://localhost:5000/${proofFile}`;
+      // Server sekarang sudah mengirim full URL, jadi langsung pakai
+      const fileUrl = proofFile.startsWith('http') ? proofFile : `http://localhost:5000/${proofFile}`;
       
       console.log("Proof file:", proofFile); // Debug
       console.log("Generated URL:", fileUrl); // Debug
