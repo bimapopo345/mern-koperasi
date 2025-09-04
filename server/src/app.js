@@ -17,7 +17,29 @@ app.use(bodyParser.json());
 
 app.use(
   cors({
-    origin: [conf.corsOrigin1, conf.corsOrigin2, conf.corsOrigin3].filter(Boolean),
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+      
+      const allowedOrigins = [conf.corsOrigin1, conf.corsOrigin2, conf.corsOrigin3].filter(Boolean);
+      
+      // In production, also allow the EC2 host without port for Nginx
+      if (process.env.NODE_ENV === 'production') {
+        const ec2Host = process.env.EC2_HOST || conf.corsOrigin1?.replace(':5000', '');
+        if (ec2Host) {
+          allowedOrigins.push(`http://${ec2Host}`);
+          allowedOrigins.push(`https://${ec2Host}`);
+        }
+      }
+      
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        console.log('CORS blocked origin:', origin);
+        console.log('Allowed origins:', allowedOrigins);
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   })

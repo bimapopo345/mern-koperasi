@@ -39,7 +39,7 @@ jobs:
             echo "MONGO_DB_URL=${{ secrets.MONGO_DB_URL }}" > .env
             echo "PORT=${{ secrets.PORT }}" >> .env
             echo "CORS_ORIGIN1=http://${{ secrets.EC2_HOST }}" >> .env
-            echo "CORS_ORIGIN2=${{ secrets.CORS_ORIGIN2 }}" >> .env
+            echo "CORS_ORIGIN2=http://${{ secrets.EC2_HOST }}:${{ secrets.PORT }}" >> .env
             echo "CORS_ORIGIN3=${{ secrets.CORS_ORIGIN3 }}" >> .env
             echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
             echo "STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}" >> .env
@@ -47,6 +47,7 @@ jobs:
             # Add SERVER_URL and CLIENT_URL for file upload functionality
             echo "SERVER_URL=http://${{ secrets.EC2_HOST }}:${{ secrets.PORT }}" >> .env
             echo "CLIENT_URL=http://${{ secrets.EC2_HOST }}" >> .env
+            echo "EC2_HOST=${{ secrets.EC2_HOST }}" >> .env
 
             # Install backend dependencies
             npm ci --production
