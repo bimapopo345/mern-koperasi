@@ -3,7 +3,7 @@ import axios from "axios";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import { toast } from "react-toastify";
-import { API_URL } from "../api/config";
+import { API_URL, SERVER_URL } from "../api/config";
 
 const Savings = () => {
   const [savings, setSavings] = useState([]);
@@ -385,7 +385,7 @@ const Savings = () => {
   const handleShowProof = (proofFile, saving) => {
     if (proofFile && proofFile !== "0") {
       // Server sekarang sudah mengirim full URL, jadi langsung pakai
-      const fileUrl = proofFile.startsWith('http') ? proofFile : `${API_URL.replace('/api', '')}/${proofFile}`;
+      const fileUrl = proofFile.startsWith('http') ? proofFile : `${SERVER_URL}/${proofFile}`;
       
       setSelectedProof({
         file: proofFile,
