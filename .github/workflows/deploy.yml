@@ -39,15 +39,13 @@ jobs:
             echo "MONGO_DB_URL=${{ secrets.MONGO_DB_URL }}" > .env
             echo "PORT=${{ secrets.PORT }}" >> .env
             echo "CORS_ORIGIN1=http://${{ secrets.EC2_HOST }}" >> .env
-            echo "CORS_ORIGIN2=http://${{ secrets.EC2_HOST }}:${{ secrets.PORT }}" >> .env
+            echo "CORS_ORIGIN2=${{ secrets.CORS_ORIGIN2 }}" >> .env
             echo "CORS_ORIGIN3=${{ secrets.CORS_ORIGIN3 }}" >> .env
             echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
             echo "STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}" >> .env
             echo "NODE_ENV=production" >> .env
-            # Add SERVER_URL and CLIENT_URL for file upload functionality
+            # Add SERVER_URL for file upload functionality
             echo "SERVER_URL=http://${{ secrets.EC2_HOST }}:${{ secrets.PORT }}" >> .env
-            echo "CLIENT_URL=http://${{ secrets.EC2_HOST }}" >> .env
-            echo "EC2_HOST=${{ secrets.EC2_HOST }}" >> .env
 
             # Install backend dependencies
             npm ci --production
@@ -60,7 +58,6 @@ jobs:
             # Create .env file for frontend
             echo "VITE_SERVER_URL=http://${{ secrets.EC2_HOST }}:${{ secrets.PORT }}" > .env
             echo "VITE_API_URL=http://${{ secrets.EC2_HOST }}:${{ secrets.PORT }}/api" >> .env
-            echo "VITE_CLIENT_URL=http://${{ secrets.EC2_HOST }}" >> .env
 
             npm ci
             npm run build
