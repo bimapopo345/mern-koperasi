@@ -384,8 +384,8 @@ const Savings = () => {
   // Handle show proof
   const handleShowProof = (proofFile, saving) => {
     if (proofFile && proofFile !== "0") {
-      // Server sekarang sudah mengirim full URL, jadi langsung pakai
-      const fileUrl = proofFile.startsWith('http') ? proofFile : `${SERVER_URL}/${proofFile}`;
+      // Backend sudah mengirim full URL, langsung gunakan tanpa modifikasi
+      const fileUrl = proofFile;
       
       setSelectedProof({
         file: proofFile,

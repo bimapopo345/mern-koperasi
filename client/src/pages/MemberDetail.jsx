@@ -170,11 +170,11 @@ const MemberDetail = () => {
 
   const handleShowProof = (proofFile, period) => {
     if (proofFile && proofFile !== "0") {
-      // Server sekarang sudah mengirim full URL, jadi langsung pakai
-      const fileUrl = proofFile.startsWith('http') ? proofFile : `${import.meta.env.VITE_SERVER_URL || 'http://localhost:5000'}/${proofFile}`;
+      // Backend sudah mengirim full URL, langsung gunakan tanpa modifikasi
+      const fileUrl = proofFile;
       
       console.log("Proof file:", proofFile); // Debug
-      console.log("Generated URL:", fileUrl); // Debug
+      console.log("Using URL directly:", fileUrl); // Debug
       
       setSelectedProof({
         file: proofFile,
